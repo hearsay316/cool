@@ -41,8 +41,8 @@ pub fn get_main_disk_info() -> PackageJson {
       }
     } else {
       PackageJson {
-        total_bytes: total_bytes as i64,
-        available_bytes: available_bytes as i64,
+        total_bytes: 0_i64,
+        available_bytes: 0_i64,
       }
     }
   }
@@ -69,7 +69,12 @@ pub fn get_main_disk_info() -> PackageJson {
   // 如果没有确定的目标挂载点，直接返回
   let target = match target_mount_point {
     Some(t) => t,
-    None => return (0, 0),
+    None => {
+      return PackageJson {
+        total_bytes: 0_i64,
+        available_bytes: 0_i64,
+      }
+    }
   };
 
   // 遍历所有磁盘，寻找主硬盘
@@ -98,7 +103,7 @@ pub fn get_main_disk_info() -> PackageJson {
 
   // 如果没有找到主硬盘，返回 (0, 0)
   PackageJson {
-    total_bytes: 0 as i64,
-    available_bytes: 0 as i64,
+    total_bytes: 0_i64,
+    available_bytes: 0_i64,
   }
 }
