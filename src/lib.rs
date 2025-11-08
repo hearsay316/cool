@@ -60,13 +60,12 @@ pub fn get_main_disk_info() -> PackageJson {
   let disks = Disks::new_with_refreshed_list();
 
   // 预先确定目标挂载点，避免在循环中重复检查系统类型
-  let target_mount_point = if cfg!(target_os = "linux") || cfg!(target_family = "unix") {
-    Some("/")
-  } else if cfg!(target_os = "macos") {
-    Some("/")
-  } else {
-    None
-  };
+  let target_mount_point =
+    if cfg!(target_os = "linux") || cfg!(target_family = "unix") || cfg!(target_os = "macos") {
+      Some("/")
+    } else {
+      None
+    };
 
   // 如果没有确定的目标挂载点，直接返回
   let target = match target_mount_point {
