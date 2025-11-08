@@ -1,7 +1,9 @@
 #![deny(clippy::all)]
 use napi_derive::napi;
-use windows::Win32::Storage::FileSystem::GetDiskFreeSpaceExW;
 
+// 导入Windows API相关模块
+#[cfg(windows)]
+use windows::Win32::Storage::FileSystem::GetDiskFreeSpaceExW;
 #[napi]
 pub fn plus_100(input: u32) -> u32 {
   input + 100
