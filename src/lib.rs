@@ -13,6 +13,7 @@ pub struct PackageJson {
 }
 
 #[napi]
+#[cfg(windows)]
 pub fn get_main_disk_info() -> PackageJson {
   use std::ffi::OsStr;
   use std::os::windows::ffi::OsStrExt;
@@ -44,5 +45,60 @@ pub fn get_main_disk_info() -> PackageJson {
         available_bytes: available_bytes as i64,
       }
     }
+  }
+}
+
+/// 跨平台兼容的获取主硬盘信息函数
+#[napi]
+#[cfg(not(windows))]
+pub fn get_main_disk_info() -> PackageJson {
+  use sysinfo::Disks;
+
+  // 创建磁盘列表实例并刷新信息
+  let disks = Disks::new_with_refreshed_list();
+
+  // 预先确定目标挂载点，避免在循环中重复检查系统类型
+  let target_mount_point = if cfg!(target_os = "linux") || cfg!(target_family = "unix") {
+    Some("/")
+  } else if cfg!(target_os = "macos") {
+    Some("/")
+  } else {
+    None
+  };
+
+  // 如果没有确定的目标挂载点，直接返回
+  let target = match target_mount_point {
+    Some(t) => t,
+    None => return (0, 0),
+  };
+
+  // 遍历所有磁盘，寻找主硬盘
+  for disk in disks.list() {
+    let mount_point = disk.mount_point().to_string_lossy();
+
+    if cfg!(target_os = "macos") {
+      // macOS系统检查，需要额外检查是否包含"Macintosh"
+      if mount_point == target || mount_point.contains("Macintosh") {
+        return PackageJson {
+          total_bytes: disk.total_space() as i64,
+          available_bytes: disk.available_space() as i64,
+        };
+        // (disk.total_space(), disk.available_space());
+      }
+    } else {
+      // Linux和其他Unix系统检查
+      if mount_point == target {
+        return PackageJson {
+          total_bytes: disk.total_space() as i64,
+          available_bytes: disk.available_space() as i64,
+        };
+      }
+    }
+  }
+
+  // 如果没有找到主硬盘，返回 (0, 0)
+  PackageJson {
+    total_bytes: 0 as i64,
+    available_bytes: 0 as i64,
   }
 }
