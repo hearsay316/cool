@@ -13,7 +13,7 @@ pub struct PackageJson {
 }
 
 #[napi]
-pub fn get_main_disk_info() -> PackageJson  {
+pub fn get_main_disk_info() -> PackageJson {
   use std::ffi::OsStr;
   use std::os::windows::ffi::OsStrExt;
 
