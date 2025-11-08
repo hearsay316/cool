@@ -572,4 +572,5 @@ if (!nativeBinding) {
 }
 
 module.exports = nativeBinding
+module.exports.getMainDiskInfo = nativeBinding.getMainDiskInfo
 module.exports.plus100 = nativeBinding.plus100

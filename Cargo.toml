@@ -2,7 +2,7 @@
 [package]
 authors = ["LongYinan <lynweklm@gmail.com>"]
 edition = "2021"
-name = "cool"
+name    = "cool"
 version = "0.1.0"
 
 [lib]
@@ -11,10 +11,14 @@ crate-type = ["cdylib"]
 [dependencies]
 napi = "3.0.0"
 napi-derive = "3.0.0"
+windows = { version = "0.62.2", features = [
+  "Win32_Storage_FileSystem",
+  "Win32_Foundation",
+] }
 
 [build-dependencies]
 napi-build = "2"
 
 [profile.release]
-lto = true
+lto   = true
 strip = "symbols"
