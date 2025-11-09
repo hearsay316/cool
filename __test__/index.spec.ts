@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { plus100, getMainDiskInfo, PackageJson } from '../index'
+import { plus100, getMainDiskInfo, DiskInfo } from '../index'
 
 test('sync function from native code', (t) => {
   const fixture = 42
@@ -9,7 +9,7 @@ test('sync function from native code', (t) => {
 
 test('getMainDiskInfo should return correct disk info', (t) => {
   // 调用函数获取磁盘信息
-  const diskInfo: PackageJson = getMainDiskInfo()
+  const diskInfo: DiskInfo = getMainDiskInfo()
 
   // 验证返回值的类型和结构
   t.true(typeof diskInfo === 'object')

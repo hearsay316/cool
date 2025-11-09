@@ -1,7 +1,7 @@
 {
   "name": "@bridge-rs/cool",
   "version": "1.0.10",
-  "description": "Template project for writing node package with napi-rs",
+  "description": "一个高性能的磁盘信息获取工具，使用 Rust 编写，通过 NAPI-RS 为 Node.js 提供原生绑定",
   "main": "index.js",
   "repository": {
     "type": "git",
